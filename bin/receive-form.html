@@ -1,69 +1,82 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <title>upload</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-    </head>
+<html lang="zh_CN" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>upload</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
 
-    <style type="text/css">
-        body {
-            background-color: #005bff47;
-            margin: 0;
-        }
+<style type="text/css">
+    body {
+        background-color: #f3f4f6;
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
 
-        #uploadForm {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            flex-direction: column;
-        }
+    #uploadForm {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        flex-direction: column;
+        transition: all 0.3s;
+    }
 
-        #share-container {
-            padding: 16px;
-            background-color: blueviolet;
-            border: 5px solid #181818;
-            font-size: 32px;
-            font-size: 5vw;
-            font-family: monospace;
-            box-sizing: content-box;
-            font-weight: bolder;
-            text-align: center;
-            color: #181818;
-        }
-        
-        a {
-            font-size: 32px;
-            font-size: 5vw;
-            font-family: monospace;
-            font-weight: bolder;
-        }
+    #share-container {
+        padding: 16px;
+        background-color: #6f7cda;
+        border: none;
+        border-radius: 10px;
+        font-size: 24px;
+        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        color: #fff;
+        cursor: pointer;
+        transition: transform 0.3s;
+    }
 
-        #share-container {
-            margin-bottom: 20px;
-        }
-    </style>
+    #share-container:hover {
+        transform: translateY(-5px);
+    }
 
-    <body>
-        <form ref='uploadForm' 
-          id='uploadForm' 
-          action='/upload' 
-          method='post' 
-          encType="multipart/form-data">
-            <div id="share-container">
-                <label id="share" for="file-input" class="btn">Share file🚀</label>
-            </div>
-            <a href="{shareAddress}" target="_blank">View directory📁<a/>
-            <input id="file-input" type="file" name="selected" multiple=true style="visibility:hidden; display:none;"/>
-        </form>
-    </body>
+    a {
+        font-size: 24px;
+        color: #6f7cda;
+        text-decoration: none;
+        border-bottom: 2px solid transparent;
+        transition: all 0.3s;
+        margin-top: 16px;
+    }
 
-    <script>
-        document.getElementById("file-input").onchange = function() {
-            document.getElementById("uploadForm").submit();
-            document.getElementById("share").innerText = "Sending...";
-        };
-    </script>
+    a:hover {
+        border-bottom: 2px solid #6f7cda;
+        color: #5a68b5;
+    }
 
+    input[type="file"] {
+        visibility: hidden;
+        display: none;
+    }
+</style>
+
+<body>
+<form ref='uploadForm'
+      id='uploadForm'
+      action='/upload'
+      method='post'
+      encType="multipart/form-data">
+    <div id="share-container">
+        <label id="share" for="file-input">Share file</label>
+    </div>
+    <a href="{shareAddress}" target="_blank">View directory</a>
+    <input id="file-input" type="file" name="selected"/>
+</form>
+
+<script>
+    document.getElementById("file-input").onchange = function() {
+        document.getElementById("uploadForm").submit();
+        document.getElementById("share").innerText = "Sending...";
+    };
+</script>
+</body>
 </html>
