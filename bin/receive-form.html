@@ -24,7 +24,7 @@
 
     #share-container {
         padding: 16px;
-        background-color: #6f7cda;
+        background-color: #189d48;
         border: none;
         border-radius: 10px;
         font-size: 24px;
@@ -41,7 +41,7 @@
 
     a {
         font-size: 24px;
-        color: #6f7cda;
+        color: #189d48;
         text-decoration: none;
         border-bottom: 2px solid transparent;
         transition: all 0.3s;
@@ -49,13 +49,29 @@
     }
 
     a:hover {
-        border-bottom: 2px solid #6f7cda;
-        color: #5a68b5;
+        border-bottom: 2px solid #189d48;
+        color: #127936;
     }
 
     input[type="file"] {
         visibility: hidden;
         display: none;
+    }
+
+    #progress-container {
+        width: 80%;
+        background-color: #e0e0e0;
+        border-radius: 12px;
+        margin: 20px 0;
+        display: none;  /* 默认隐藏 */
+    }
+
+    #progress-bar {
+        height: 20px;
+        width: 0;
+        background-color: #189d48;
+        border-radius: 12px;
+        transition: width 0.4s;
     }
 </style>
 
@@ -65,6 +81,10 @@
       action='/upload'
       method='post'
       encType="multipart/form-data">
+
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
     <div id="share-container">
         <label id="share" for="file-input">Share file</label>
     </div>
@@ -77,6 +97,53 @@
         document.getElementById("uploadForm").submit();
         document.getElementById("share").innerText = "Sending...";
     };
+    document.getElementById("file-input").onchange = function() {
+        var form = document.getElementById("uploadForm");
+        var fileInput = this;
+        var progressBar = document.getElementById("progress-bar");
+        var progressContainer = document.getElementById("progress-container");
+        var shareButton = document.getElementById("share");
+        // 显示进度条容器
+        progressContainer.style.display = "block";
+
+        // 使用FormData收集表单数据
+        var formData = new FormData(form);
+
+        // 创建XMLHttpRequest
+        var request = new XMLHttpRequest();
+
+        // 监听上传进度
+        request.upload.onprogress = function(event) {
+            if (event.lengthComputable) {
+                var percent = (event.loaded / event.total) * 100;
+                progressBar.style.width = percent + "%";
+            }
+        };
+
+        // 监听请求完成
+        request.onload = function() {
+
+            if (request.status === 200) {
+                // 上传成功的操作
+                shareButton.innerText = "Uploaded!";
+                progressContainer.style.display = "none";  // 隐藏进度条
+            } else {
+                // 上传失败的操作
+                shareButton.innerText = "Upload failed!";
+                //红色警告⚠️
+                document.getElementById("share-container").style.backgroundColor = "red";
+            }
+        };
+
+
+        // 发送请求
+        request.open(form.method, form.action, true);
+        request.send(formData);
+
+        // 防止默认的表单提交
+        return false;
+    };
+
 </script>
 </body>
 </html>
