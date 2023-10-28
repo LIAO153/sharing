@@ -9,21 +9,21 @@ const config = require('./config');
 const utils = require('./utils');
 
 const mvFiles = async (path, files) => {
-  const selectedFiles = Array.isArray(files) ? files : [files];
-  let mvTask = [];
-  for (let i = 0; i < selectedFiles.length; i++) {
-    const selectedFile = selectedFiles[i];
-    const selectedFileName = new Buffer(selectedFile.name, 'ascii').toString('utf8');
-    const uploadPath = _path.resolve(__dirname, path) + '/' + selectedFileName;
-    utils.debugLog(`upload path: ${uploadPath}`);
-    mvTask.push(new Promise((resolve, reject) => {
-      selectedFile.mv(uploadPath).then((err) => err ? reject({ uploadPath, err }) : resolve({ uploadPath }));
-    }));
-  }
-  const mvRes = await Promise.allSettled(mvTask);
-  const fulfilledList = mvRes.filter(({ status }) => status === 'fulfilled');
-  const rejectedList = mvRes.filter(({ status }) => status === 'rejected');
-  return { fulfilledList, rejectedList };
+    const selectedFiles = Array.isArray(files) ? files : [files];
+    let mvTask = [];
+    for (let i = 0; i < selectedFiles.length; i++) {
+        const selectedFile = selectedFiles[i];
+        const selectedFileName = new Buffer(selectedFile.name, 'ascii').toString('utf8');
+        const uploadPath = _path.resolve(__dirname, path) + '/' + selectedFileName;
+        utils.debugLog(`upload path: ${uploadPath}`);
+        mvTask.push(new Promise((resolve, reject) => {
+            selectedFile.mv(uploadPath).then((err) => err ? reject({uploadPath, err}) : resolve({uploadPath}));
+        }));
+    }
+    const mvRes = await Promise.allSettled(mvTask);
+    const fulfilledList = mvRes.filter(({status}) => status === 'fulfilled');
+    const rejectedList = mvRes.filter(({status}) => status === 'rejected');
+    return {fulfilledList, rejectedList};
 }
 
 const start = ({port, path, receive, clipboard, updateClipboardData, onStart, postUploadRedirectUrl, shareAddress}) => {
@@ -100,14 +100,19 @@ const start = ({port, path, receive, clipboard, updateClipboardData, onStart, po
         //生成文件/文件夹列表:
         const pathList = path.map((pathItem) => {
             let type = "folder";
-            const baseName = _path.basename(pathItem);
+            let baseName = _path.basename(pathItem);
             const isFile = fs.lstatSync(pathItem).isFile();
             if (isFile) {
                 type = _path.extname(pathItem).replace('.', '');
                 pathItem = _path.dirname(pathItem);
             }
             const route = crypto.createHash('md5').update(pathItem).digest('hex');
-            return {name: `${baseName}/`, url: `/folder/${route}/${isFile ? baseName : ''}`, type: type};
+            //如果类型为文件夹，则在文件夹名后面加 "..."
+            if (type === "folder") {
+                baseName = baseName + " ...";
+            }
+
+            return {name: `${baseName}`, url: `/folder/${route}/${isFile ? baseName : ''}`, type: type};
         });
         res.send(form.toString().replace(/\"\{pathList\}\"/, JSON.stringify(pathList)));
     });
