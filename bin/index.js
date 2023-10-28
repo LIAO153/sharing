@@ -226,7 +226,6 @@ function useNgrok(authtoken, port) {
         // How to exit
         !options.dev && console.log('\nPress ctrl+c to stop sharing\n');
     }
-
     app.start({ 
         port: options.port,
         path,
@@ -239,9 +238,10 @@ function useNgrok(authtoken, port) {
     });
     /**
      * @desc Unified printing method
-     * @param {Object} arg 
+     * @param {Object} arg
     */
     function print(arg) {
-      console.log(options.dev ? JSON.stringify(arg): arg.msg);
+        console.log(options.dev ? JSON.stringify(arg): arg.msg);
     }
+
 })();
