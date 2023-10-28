@@ -75,7 +75,17 @@
 
         /*文件夹类图标*/
         #container a.folder::before {
-            content: url("../assets/ic_public_storage.svg");
+            content: url("../assets/ic_public_folder.svg");
+        }
+
+        /*压缩包类图标*/
+        #container a.jpg::before,
+        #container a.rar::before,
+        #container a.tar::before,
+        #container a.gz::before,
+        #container a.xz::before,
+        #container a.zip::before {
+            content: url("../assets/ic_public_zip.svg");
         }
 
         #container a.lambda::before {

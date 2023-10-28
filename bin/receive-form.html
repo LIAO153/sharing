@@ -122,7 +122,7 @@
 
         // 监听请求完成
         request.onload = function() {
-
+            document.getElementById("share-container").style.backgroundColor = "#189d48"
             if (request.status === 200) {
                 // 上传成功的操作
                 shareButton.innerText = "Uploaded!";
