@@ -1,6 +1,6 @@
 {
   "name": "easy-sharing",
-  "version": "1.2.3",
+  "version": "2.0.0",
   "description": "Sharing is a command-line tool to share directories and files from the CLI to iOS and Android devices without the need of an extra client app",
   "main": "bin/index.js",
   "scripts": {
@@ -31,12 +31,12 @@
   "preferGlobal": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/imyuanx/sharing.git"
+    "url": "git+https://github.com/LIAO153/sharing.git"
   },
   "bugs": {
-    "url": "https://github.com/imyuanx/sharing/issues"
+    "url": "https://github.com/LIAO153/sharing/issues"
   },
-  "homepage": "https://github.com/imyuanx/sharing#readme",
+  "homepage": "https://github.com/LIAO153/sharing#readme",
   "dependencies": {
     "clipboardy-cjs": "^3.0.0",
     "express": "^4.18.1",
@@ -51,7 +51,8 @@
   "pkg": {
     "assets": [
       "bin/**/*",
-      "node_modules/ngrok/**"
+      "node_modules/ngrok/**",
+      "assets/**/*"
     ],
     "outputPath": "dist"
   }

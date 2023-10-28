@@ -15,7 +15,7 @@ const config = require('./config');
 const utils = require('./utils');
 
 
-// Usage
+// 用法
 const usage = `
 Usage:
 • Share file or directory
@@ -30,6 +30,13 @@ $ sharing /destination/directory --receive;
 • Share file with Basic Authentication
 $ sharing /path/to/file-or-directory -U user -P password  # also works with --receive`;
 
+/**
+ * 使用 Ngrok 的函数 (useNgrok):
+ * 使用 ngrok 库将本地服务暴露到公网，使其可以从外部网络访问。
+ * @param authtoken
+ * @param port
+ * @returns {Promise<unknown>}
+ */
 function useNgrok(authtoken, port) {
     return new Promise((reslove, reject) => {
         ngrok
@@ -74,7 +81,7 @@ function useNgrok(authtoken, port) {
 
     config.debug = options.debug || config.debug;
 
-    // seems windows os can't support small option on native terminal, refer to https://github.com/gtanner/qrcode-terminal/pull/14/files
+    // 似乎Windows操作系统无法在本机终端上支持小选项，请参阅 https://github.com/gtanner/qrcode-terminal/pull/14/files
     config.qrcode.small = !options.onWindowsNativeTerminal;
 
     if (options.username && options.password) {
@@ -194,20 +201,26 @@ function useNgrok(authtoken, port) {
 
     const onStart = () => {
         // Handle receive
+        let usageMessage;
         if (options.receive) {
             !options.dev && console.log('\nScan the QR-Code to upload your file');
             !options.dev && qrcode.generate(uploadAddress, config.qrcode);
-            print({ success: true, type: 'START', data: { link: uploadAddressInfo }, msg: `access link: ${uploadAddress}\n` });
+            print({
+                success: true,
+                type: 'START',
+                data: {link: uploadAddressInfo},
+                msg: `access link: ${uploadAddress}\n`
+            });
         } else {
             // Handle share
             if (options.clipboard) {
-              usageMessage = 'Scan the QR-Code to access your Clipboard'
+                usageMessage = 'Scan the QR-Code to access your Clipboard'
             } else {
-              usageMessage = `Scan the QR-Code to access '${path.join(' and ')}' directory on your phone`;
+                usageMessage = `Scan the QR-Code to access '${path.join(' and ')}' directory on your phone`;
             }
             !options.dev && console.log(usageMessage);
             !options.dev && qrcode.generate(shareAddress, config.qrcode);
-            print({ success: true, type: 'START', data: { link: shareAddressInfo }, msg: `access link: ${shareAddress}` });
+            print({success: true, type: 'START', data: {link: shareAddressInfo}, msg: `access link: ${shareAddress}`});
         }
 
         // How to exit
